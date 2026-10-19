@@ -86,18 +86,18 @@ export function DocumentLibrary({ sources }: { sources: Source[] }) {
       <div className="docs-banner">
         <BookOpen size={23} />
         <div>
-          <h3>迅投内置 Python 官方正文库</h3>
+          <h2>迅投内置 Python 官方正文库</h2>
           {status ? (
-            <p>
+            <p className="document-status-meta">
               已收录 {status.indexedPages} / {status.discoveredPages} 个页面、
               {status.sectionCount} 个章节，共约{" "}
               {Math.round(status.characters / 10000)} 万字。采集日期：
-              {status.fetchedAt.slice(0, 10)}。AI
-              根据策略需求检索正文并引用具体章节；客户端兼容性仍需验收。
+              {status.fetchedAt.slice(0, 10)}。
             </p>
           ) : (
             <p>正在加载文档收录状态…</p>
           )}
+          <p>AI 根据策略需求检索正文并引用具体章节；客户端兼容性仍需验收。</p>
           {statusError && (
             <p role="alert">
               {statusError}{" "}
@@ -118,30 +118,36 @@ export function DocumentLibrary({ sources }: { sources: Source[] }) {
           onSubmit={(event) => void search(event)}
           className="document-search-form"
         >
-          <label className="search-input">
-            <Search size={17} />
-            <input
-              aria-label="文档关键词"
-              placeholder="输入接口名称或中文关键词"
-              required
-              minLength={2}
-              maxLength={300}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+          <label className="document-keyword">
+            <span>文档关键词</span>
+            <span className="search-input">
+              <Search size={17} />
+              <input
+                aria-label="文档关键词"
+                placeholder="输入接口名称或中文关键词"
+                required
+                minLength={2}
+                maxLength={300}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </span>
           </label>
-          <select
-            aria-label="文档范围"
-            value={pageId}
-            onChange={(e) => setPageId(e.target.value)}
-          >
-            <option value="">全部文档</option>
-            {sources.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.title}
-              </option>
-            ))}
-          </select>
+          <label className="document-range">
+            <span>文档范围</span>
+            <select
+              aria-label="文档范围"
+              value={pageId}
+              onChange={(e) => setPageId(e.target.value)}
+            >
+              <option value="">全部文档</option>
+              {sources.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.title}
+                </option>
+              ))}
+            </select>
+          </label>
           <button className="primary-button" type="submit" disabled={busy}>
             {busy ? (
               <LoaderCircle className="spin" size={16} />
@@ -151,6 +157,7 @@ export function DocumentLibrary({ sources }: { sources: Source[] }) {
             检索正文
           </button>
         </form>
+        <span className="document-topics-label">常用专题</span>
         <nav className="document-topics" aria-label="实盘官方文档专题">
           {[
             ["实盘运行", "实盘模型", "qmt-start-now"],
@@ -182,7 +189,7 @@ export function DocumentLibrary({ sources }: { sources: Source[] }) {
           </p>
         )}
         {searched && (
-          <p role="status">
+          <p role="status" className="document-result-summary">
             “{searched}”找到 {passages.length} 个正文片段
             {passages.length
               ? "，展开查看原文。"
@@ -196,7 +203,9 @@ export function DocumentLibrary({ sources }: { sources: Source[] }) {
               <p className="document-passage-meta">
                 {p.title} · 片段 {p.id} · 采集于 {p.fetchedAt.slice(0, 10)}
               </p>
-              <pre>{p.text}</pre>
+              <pre tabIndex={0} aria-label={`${p.heading} · 章节正文`}>
+                {p.text}
+              </pre>
               <div className="document-passage-actions">
                 <a href={p.url} target="_blank" rel="noreferrer">
                   在官网打开本章节 ↗

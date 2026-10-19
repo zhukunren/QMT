@@ -1799,8 +1799,8 @@ export function App() {
             <>
               <PageIntro
                 eyebrow="OFFICIAL REFERENCES"
-                title="官方文档参考"
-                description="每个接口都有出处，每个约定都可查阅。"
+                title="官方文档"
+                description="检索官方章节，核对接口约定与脚本依据。"
               />
               <DocumentLibrary sources={sources} />
               <div className="panel docs-footnote">
