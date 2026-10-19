@@ -1,0 +1,2 @@
+# The PDF renderer uses the same Python configured in PYTHON_PATH.
+reportlab>=4.4.3,<5

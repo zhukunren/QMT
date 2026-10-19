@@ -1,0 +1,34 @@
+{
+  "name": "dongwu-qmt-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "docs:sync": "python -X utf8 scripts/sync-qmt-docs.py",
+    "dev": "concurrently -k -n API,WEB -c blue,red \"npm run dev -w @qmt/api\" \"npm run dev -w @qmt/web\"",
+    "build": "npm run build -w @qmt/web && npm run build -w @qmt/api",
+    "typecheck": "tsc --noEmit -p apps/api/tsconfig.json && tsc --noEmit -p apps/web/tsconfig.json",
+    "test": "vitest run",
+    "start": "npm run start -w @qmt/api",
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.0.0",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.9.10",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-win32-x64-msvc": "^4.64.10"
+  }
+}
